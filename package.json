@@ -1,0 +1,29 @@
+{
+  "name": "tdd",
+  "version": "1.0.0",
+  "description": "express, mongoose, jest, node-mocks-http, supertest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MinJaehyun/tdd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MinJaehyun/tdd/issues"
+  },
+  "homepage": "https://github.com/MinJaehyun/tdd#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mongoose": "^6.1.5"
+  },
+  "devDependencies": {
+    "jest": "^27.4.6",
+    "node-mocks-http": "^1.11.0",
+    "supertest": "^6.1.6"
+  }
+}
