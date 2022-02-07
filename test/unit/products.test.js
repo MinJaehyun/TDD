@@ -9,7 +9,7 @@ let req, res, next;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-  next = null;
+  next = jest.fn();
 })
 
 describe("Product Controller Create", () => {
@@ -56,5 +56,8 @@ describe("Product Controller Create", () => {
     productModel.create.mockReturnValue(rejectedPromise);
     await productController.createProduct(req, res, next);
     expect(next).toBeCalledWith(errorMessage);
+    // err: TypeError: next is not a function
+    // next 를 함수로 만들어 주는데, 기존에 내용을 참고하지 않고 가짜 함수로 만든다
+    // 해결: 상단 next: null 값 변경 => jest.fn();
   })
 });
