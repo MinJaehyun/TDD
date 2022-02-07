@@ -42,4 +42,19 @@ describe("Product Controller Create", () => {
     await productController.createProduct(req, res, next);
     expect(res._getJSONData()).toStrictEqual(newProduct);
   })
-})
+  // 에러 처리 구현
+  it("should handle errors", async () => {
+    /** 
+     * 1. 메시지 작성
+     * 2. 비동기 요청에 대한 결과 값을, 성공 또는 실패로 만든다.
+     * 3. 모델을 생성 시 실패한 결과 값을 나타낸다
+     * 4. 기댓값에 next 로 설정하고, 인자로 무엇이 넘어왔었는지를 검증한다.
+     * 5. 실제 코드를 작성한다.
+    */
+    const errorMessage = { message: "description property missing" };
+    const rejectedPromise = Promise.reject(errorMessage);
+    productModel.create.mockReturnValue(rejectedPromise);
+    await productController.createProduct(req, res, next);
+    expect(next).toBeCalledWith(errorMessage);
+  })
+});
