@@ -6,12 +6,17 @@ const newProduct = require('../data/new-product.json');
 productModel.create = jest.fn();
 
 let req, res, next;
-req = httpMocks.createRequest();
-res = httpMocks.createResponse();
-
-req.body = newProduct;
+beforeEach(() => {
+  req = httpMocks.createRequest();
+  res = httpMocks.createResponse();
+  next = null;
+})
 
 describe("Product Controller Create", () => {
+  // create 에서만 사용될 newProduct
+  beforeEach(() => {
+    req.body = newProduct;
+  })
   it("should have a createProduct function", () => {
     expect(typeof productController.createProduct).toBe("function")
   })
