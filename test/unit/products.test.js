@@ -31,15 +31,15 @@ describe("Product Controller Create", () => {
   })
   // 상태 값 확인: 같은지 확인
   // 응답 값 확인: 전송 됐는지 확인
-  it("should return 201 response code", () => {
-    productController.createProduct(req, res, next);
+  it("should return 201 response code", async () => {
+    await productController.createProduct(req, res, next);
     expect(res.statusCode).toBe(201);
     expect(res._isEndCalled()).toBeTruthy();
   })
   // 응답 값 반환: json => send 로 test 해보기 TODO:node-mocks-http
-  it("should return json body in response", () => {
+  it("should return json body in response", async () => {
     productModel.create.mockReturnValue(newProduct);
-    productController.createProduct(req, res, next);
+    await productController.createProduct(req, res, next);
     expect(res._getJSONData()).toStrictEqual(newProduct);
   })
 })

@@ -1,8 +1,8 @@
 const productModel = require('../models/product');
 
-exports.createProduct = (req, res, next) => {
+exports.createProduct = async (req, res, next) => {
   // model.Article 이런식으로 사용했다.
-  const createProduct = productModel.create(req.body);
+  const createProduct = await productModel.create(req.body);
   // 아래처럼 사용 가능
   // const info = req.body;     // name, descripttion, price
   // productModel.create(info);
