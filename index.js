@@ -22,6 +22,12 @@ app.get('/', (req, res) => {
 
 app.use("/api/products", productRouters)
 
-app.listen(PORT, () => {
-  console.log(`Running on port ${PORT}`);
-});
+// NOTE: supertest 로 인해 이미 서버가 돌아가는데, 원래 코드로 인해 다시 한번 서버가 켜지려 하니 에러가 난다.
+// app.listen(PORT, () => {
+//   console.log(`Running on port ${PORT}`);
+// });
+
+// app.listen(PORT);
+// console.log(`Running on port ${PORT}`);
+
+module.exports = app;

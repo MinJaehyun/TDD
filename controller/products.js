@@ -4,7 +4,7 @@ exports.createProduct = async (req, res, next) => {
   try {
     // model.Article 이런식으로 사용했다.
     const createProduct = await productModel.create(req.body);
-    console.log('createProduct', createProduct);
+    // console.log('createProduct', createProduct);
     // 아래처럼 사용 가능
     // const info = req.body;     // name, descripttion, price
     // productModel.create(info);
