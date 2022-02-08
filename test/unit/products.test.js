@@ -6,6 +6,9 @@ const allProducts = require('../data/all-products.json');
 
 productModel.create = jest.fn();
 productModel.find = jest.fn();
+productModel.findById = jest.fn();
+
+const productId = "6201ef110260a022ede7d155"
 
 let req, res, next;
 beforeEach(() => {
@@ -92,4 +95,37 @@ describe("Product Controller Get", () => {
   })
 })
 
-describe("Product Controller ")
+describe("Product Controller GetById", () => {
+  it("should have a getProductById", () => {
+    expect(typeof productController.getProductById).toBe("function")
+  })
+  it("should call productModel.findById", async () => {
+    req.params.productId = productId
+    await productController.getProductById(req, res, next);
+    expect(productModel.findById).toBeCalledWith(productId);
+  })
+  it("should return json body and response code 200", async () => {
+    // return 할 data 는 mock 데이터 이여야 한다. 고로, mockReturnValue 를 사용하여 임시 데이터를 넣는다.
+    productModel.findById.mockReturnValue(newProduct);
+    await productController.getProductById(req, res, next);
+    // 상태코드, _getJSONData: 전달한 JSON 타입의 결과값을 참조할 수 있다, json or send 응답 
+    expect(res.statusCode).toBe(200);
+    // _getJSONData 는 newProduct 와 같다
+    expect(res._getJSONData()).toStrictEqual(newProduct);
+    expect(res._isEndCalled()).toBeTruthy();
+  })
+  it("shold return 404 when item doesn't exist", async () => {
+    // 404 를 나타내기 위해, 데이터 값은 null 로 넣는다
+    productModel.findById.mockReturnValue(null)
+    await productController.getProductById(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled).toBeTruthy();
+  })
+  it("should handle errors", async () => {
+    const errorsMessage = { message: "error" };
+    const rejectPromise = Promise.reject(errorsMessage);
+    productModel.findById.mockReturnValue(rejectPromise);
+    await productController.getProductById(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorsMessage);
+  })
+})

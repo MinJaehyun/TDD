@@ -27,8 +27,8 @@ app.use("/api/products", productRouters)
 //   console.log(`Running on port ${PORT}`);
 // });
 
-// app.listen(PORT);
-// console.log(`Running on port ${PORT}`);
+app.listen(PORT);
+console.log(`Running on port ${PORT}`);
 
 // TODO: 기존 프로젝트에 중복되는 부분을 아래처럼 index.js 에 설정하여 처리하기!
 app.use((error, req, res, next) => {
