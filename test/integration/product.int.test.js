@@ -3,6 +3,7 @@ const app = require('../../index');
 const newProduct = require('../data/new-product.json');
 let firstProduct;
 
+// create
 it("POST /api/products", async () => {
   const response = await request(app)
     .post("/api/products")
@@ -13,6 +14,7 @@ it("POST /api/products", async () => {
   expect(response.body.description).toBe(newProduct.description)
 })
 
+// create
 it("should return 500 on POST /api/products", async () => {
   const response = await request(app)
     .post('/api/products')
@@ -26,6 +28,7 @@ it("should return 500 on POST /api/products", async () => {
   expect(response.body).toStrictEqual({ message: "Product validation failed: description: Path `description` is required." })
 })
 
+// read
 it("GET /api/products", async () => {
   const response = await request(app).get('/api/products');
   expect(response.statusCode).toBe(200);
@@ -35,6 +38,7 @@ it("GET /api/products", async () => {
   firstProduct = response.body[0];
 })
 
+// :productId
 it("GET /api/products/:productId", async () => {
   const response = await request(app).get('/api/products/' + firstProduct._id);
   expect(response.statusCode).toBe(200);
@@ -42,6 +46,7 @@ it("GET /api/products/:productId", async () => {
   expect(response.body.description).toBe(firstProduct.description);
 })
 
+// :productId
 it("GET id doesn't exitst /api/products/:productId", async () => {
   const response = await request(app).get('/api/products/6201ef110260a022ede7d111');
   expect(response.statusCode).toBe(404);
