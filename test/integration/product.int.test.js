@@ -51,3 +51,6 @@ it("GET id doesn't exitst /api/products/:productId", async () => {
   const response = await request(app).get('/api/products/6201ef110260a022ede7d111');
   expect(response.statusCode).toBe(404);
 })
+
+// update
+it("")

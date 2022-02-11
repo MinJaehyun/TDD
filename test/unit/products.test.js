@@ -10,6 +10,7 @@ productModel.findById = jest.fn();
 productModel.findByIdAndUpdate = jest.fn();
 
 const productId = "6201ef110260a022ede7d155"
+const updateProduct = { name: "update", description: "update" };
 
 let req, res, next;
 beforeEach(() => {
@@ -137,10 +138,26 @@ describe("Product Controller Update", () => {
   })
   it("should call productModel.findByIdAndUpdate", async () => {
     req.params.productId = productId;
-    req.body = { name: "update", description: "update" };
+    req.body = updateProduct;
     await productController.updateProduct(req, res, next);
     expect(productModel.findByIdAndUpdate).toHaveBeenCalledWith(
-      productId, { name: "update", description: "update" }, { new: true }
+      productId, updateProduct, { new: true }
     )
+  })
+  it("should return json body and response code 200", async () => {
+    req.params.productId = productId;
+    req.body = updateProduct;
+    productModel.findByIdAndUpdate.mockReturnValue(updateProduct);
+    await productController.updateProduct(req, res, next);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(updateProduct);
+  })
+  it("should handle 404 when item doesn't exist", async () => {
+    // 에러를 출력하기 위해 null 지정
+    productModel.findByIdAndUpdate.mockReturnValue(null);
+    await productController.updateProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
   })
 })
