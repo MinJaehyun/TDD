@@ -198,7 +198,6 @@ describe("Product Controller Delete", () => {
     expect(res._isEndCalled).toBeTruthy();
   })
   it("should handle errors", async () => {
-    // 통합 테스트는 $ npm run test 진행하므로, 전체 테스트 한다. 이 때, 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
     const errorMessage = { message: "Error deleting" };
     const rejectPromise = Promise.reject(errorMessage);
     productModel.findByIdAndDelete.mockReturnValue(rejectPromise)

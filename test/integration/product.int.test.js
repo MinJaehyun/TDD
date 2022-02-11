@@ -69,3 +69,13 @@ it("should return 404 on PUT /api/products", async () => {
     .send({ name: "update", description: "update" });
   expect(res.statusCode).toBe(404);
 })
+
+// delete
+it("DELETE /api/products", async () => {
+  const res = await request(app)
+    .delete('/api/products' + firstProduct._id)
+    .send();
+  expect(res.statusCode).toBe(200);
+})
+
+// 통합 테스트는 전체 테스트 한다. 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
