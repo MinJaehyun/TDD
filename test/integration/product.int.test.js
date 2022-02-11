@@ -8,7 +8,6 @@ it("POST /api/products", async () => {
   const response = await request(app)
     .post("/api/products")
     .send(newProduct);
-  // console.log('response: ', response);
   expect(response.statusCode).toBe(201)
   expect(response.body.name).toBe(newProduct.name)
   expect(response.body.description).toBe(newProduct.description)
@@ -18,20 +17,14 @@ it("POST /api/products", async () => {
 it("should return 500 on POST /api/products", async () => {
   const response = await request(app)
     .post('/api/products')
-    // 에러: connect ECONNREFUSED 127.0.0.1:80
-    // 해결: .post('api/products') 를 .post('/api/products')
     .send({ name: "phone" });
   expect(response.statusCode).toBe(500)
-  // console.log('response.body', response.body);
-  // expect(response.body).toStrictEqual({ message: "" })
-  // 콘솔에 찍힌 에러를 넣어준다.
   expect(response.body).toStrictEqual({ message: "Product validation failed: description: Path `description` is required." })
 })
 
 // read
 it("GET /api/products", async () => {
   const response = await request(app).get('/api/products');
-  // console.log('response: ', response.body[0]);                 // 6201ef110260a022ede7d188
   expect(response.statusCode).toBe(200);
   expect(Array.isArray(response.body)).toBeTruthy();
   expect(response.body[0].name).toBeDefined();

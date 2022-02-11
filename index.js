@@ -22,10 +22,6 @@ app.get('/', (req, res) => {
 
 app.use("/api/products", productRouters)
 
-// NOTE: supertest 로 인해 이미 서버가 돌아가는데, 원래 코드로 인해 다시 한번 서버가 켜지려 하니 에러가 난다.
-// app.listen(PORT);
-// console.log(`Running on port ${PORT}`);
-
 if (process.env.NODE_ENV == 'production') {
   app.listen(PORT, () => {
     console.log(`production Running on port ${PORT}`);
@@ -38,7 +34,6 @@ else if (process.env.NODE_ENV == 'test') {
   console.log('test!');
 }
 
-// TODO: 기존 프로젝트에 중복되는 부분을 아래처럼 index.js 에 설정하여 처리하기!
 app.use((error, req, res, next) => {
   return res.status(500).json({ message: error.message })
 })

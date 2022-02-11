@@ -35,7 +35,6 @@ describe("Product Controller Create", () => {
     // toBeCalledWith: 인자로 무엇이 넘어 왔는지를 검증할 수 있다.
     expect(productModel.create).toBeCalledWith(newProduct);
     // toBeCalled : 잘못된 Matcher 사용 시, 아래 에러 발생
-    // Matcher error: this matcher must not have an expected argument
   })
   // 상태 값 확인: 같은지 확인
   // 응답 값 확인: 전송 됐는지 확인
@@ -44,7 +43,6 @@ describe("Product Controller Create", () => {
     expect(res.statusCode).toBe(201);
     expect(res._isEndCalled()).toBeTruthy();
   })
-  // 응답 값 반환: json => send 로 test 해보기 TODO:node-mocks-http
   it("should return json body in response", async () => {
     productModel.create.mockReturnValue(newProduct);
     await productController.createProduct(req, res, next);
@@ -52,21 +50,11 @@ describe("Product Controller Create", () => {
   })
   // 에러 처리 구현
   it("should handle errors", async () => {
-    /** 
-     * 1. 메시지 작성
-     * 2. 비동기 요청에 대한 결과 값을, 성공 또는 실패로 만든다.
-     * 3. 모델을 생성 시 실패한 결과 값을 나타낸다
-     * 4. 기댓값에 next 로 설정하고, 인자로 무엇이 넘어왔었는지를 검증한다.
-     * 5. 실제 코드를 작성한다.
-    */
     const errorMessage = { message: "description property missing" };
     const rejectedPromise = Promise.reject(errorMessage);
     productModel.create.mockReturnValue(rejectedPromise);
     await productController.createProduct(req, res, next);
     expect(next).toBeCalledWith(errorMessage);
-    // err: TypeError: next is not a function
-    // next 를 함수로 만들어 주는데, 기존에 내용을 참고하지 않고 가짜 함수로 만든다
-    // 해결: 상단 next: null 값 변경 => jest.fn();
   })
 });
 
@@ -84,7 +72,6 @@ describe("Product Controller Get", () => {
     expect(res._isEndCalled).toBeTruthy();
   })
   it("should return json body in response", async () => {
-    // allProducts.find 하면 리턴값은 가짜값인 allProducts 를 출력한다
     productModel.find.mockReturnValue(allProducts)
     await productController.getProducts(req, res, next)
     expect(res._getJSONData()).toStrictEqual(allProducts)
@@ -108,12 +95,9 @@ describe("Product Controller GetById", () => {
     expect(productModel.findById).toBeCalledWith(productId);
   })
   it("should return json body and response code 200", async () => {
-    // return 할 data 는 mock 데이터 이여야 한다. 고로, mockReturnValue 를 사용하여 임시 데이터를 넣는다.
     productModel.findById.mockReturnValue(newProduct);
     await productController.getProductById(req, res, next);
-    // 상태코드, _getJSONData: 전달한 JSON 타입의 결과값을 참조할 수 있다, json or send 응답 
     expect(res.statusCode).toBe(200);
-    // _getJSONData 는 newProduct 와 같다
     expect(res._getJSONData()).toStrictEqual(newProduct);
     expect(res._isEndCalled()).toBeTruthy();
   })
@@ -155,7 +139,6 @@ describe("Product Controller Update", () => {
     expect(res._getJSONData()).toStrictEqual(updateProduct);
   })
   it("should handle 404 when item doesn't exist", async () => {
-    // 에러를 출력하기 위해 null 지정
     productModel.findByIdAndUpdate.mockReturnValue(null);
     await productController.updateProduct(req, res, next);
     expect(res.statusCode).toBe(404);
@@ -180,7 +163,6 @@ describe("Product Controller Delete", () => {
     expect(productModel.findByIdAndDelete).toHaveBeenCalledWith(productId);
   })
   it("should return 200 response", async () => {
-    // 삭제할 값 설정하기
     let deleteProduct = {
       name: "delete",
       description: "delete",
