@@ -8,6 +8,7 @@ productModel.create = jest.fn();
 productModel.find = jest.fn();
 productModel.findById = jest.fn();
 productModel.findByIdAndUpdate = jest.fn();
+productModel.findByIdAndDelete = jest.fn();
 
 const productId = "6201ef110260a022ede7d155"
 const updateProduct = { name: "update", description: "update" };
@@ -165,6 +166,43 @@ describe("Product Controller Update", () => {
     const rejectPromise = Promise.reject(errorMessage);
     productModel.findByIdAndUpdate.mockReturnValue(rejectPromise);
     await productController.updateProduct(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  })
+})
+
+describe("Product Controller Delete", () => {
+  it("should have a deleteProduct function", () => {
+    expect(typeof productController.deleteProduct).toBe("function");
+  })
+  it("should call productModel.findByIdAndDelete", async () => {
+    req.params.productId = productId;
+    await productController.deleteProduct(req, res, next);
+    expect(productModel.findByIdAndDelete).toHaveBeenCalledWith(productId);
+  })
+  it("should return 200 response", async () => {
+    // 삭제할 값 설정하기
+    let deleteProduct = {
+      name: "delete",
+      description: "delete",
+    }
+    productModel.findByIdAndDelete.mockReturnValue(deleteProduct);
+    await productController.deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._getJSONData()).toStrictEqual(deleteProduct);
+    expect(res._isEndCalled()).toBeTruthy();
+  })
+  it("should handle 404 when item doesnt exist", async () => {
+    productModel.findByIdAndDelete.mockReturnValue(null);
+    await productController.deleteProduct(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled).toBeTruthy();
+  })
+  it("should handle errors", async () => {
+    // 통합 테스트는 $ npm run test 진행하므로, 전체 테스트 한다. 이 때, 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
+    const errorMessage = { message: "Error deleting" };
+    const rejectPromise = Promise.reject(errorMessage);
+    productModel.findByIdAndDelete.mockReturnValue(rejectPromise)
+    await productController.deleteProduct(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage);
   })
 })
