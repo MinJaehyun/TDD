@@ -160,4 +160,11 @@ describe("Product Controller Update", () => {
     expect(res.statusCode).toBe(404);
     expect(res._isEndCalled()).toBeTruthy();
   })
+  it("should handle errors", async () => {
+    const errorMessage = { message: "Error" };
+    const rejectPromise = Promise.reject(errorMessage);
+    productModel.findByIdAndUpdate.mockReturnValue(rejectPromise);
+    await productController.updateProduct(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  })
 })
