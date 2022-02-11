@@ -28,5 +28,6 @@ This usually means that there are asynchronous operations that weren't stopped i
 
 router.get('/', productController.getProducts);
 router.get('/:productId', productController.getProductById);
+// router.get('/update', productController.updateProduct);
 
 module.exports = router;

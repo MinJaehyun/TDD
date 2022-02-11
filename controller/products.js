@@ -1,4 +1,5 @@
 const productModel = require('../models/product');
+const mongoose = require('mongoose');
 
 exports.createProduct = async (req, res, next) => {
   try {
@@ -30,8 +31,18 @@ exports.getProductById = async (req, res, next) => {
   try {
     const product = await productModel.findById(req.params.productId);
     if (!product) return res.status(404).send();
+    if (!mongoose.isValidObjectId(req.params.productId)) return res.status(404).send({ err: "articleId is invalid" });
     return res.status(200).json(product);
   } catch (error) {
     next(error)
   }
+};
+
+exports.updateProduct = async (req, res, next) => {
+  const { productId } = req.params;
+  await productModel.findByIdAndUpdate(
+    productId,
+    req.body,
+    { new: true }
+  )
 };

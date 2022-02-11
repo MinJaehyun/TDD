@@ -7,6 +7,7 @@ const allProducts = require('../data/all-products.json');
 productModel.create = jest.fn();
 productModel.find = jest.fn();
 productModel.findById = jest.fn();
+productModel.findByIdAndUpdate = jest.fn();
 
 const productId = "6201ef110260a022ede7d155"
 
@@ -93,7 +94,7 @@ describe("Product Controller Get", () => {
     await productController.getProducts(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage)
   })
-})
+});
 
 describe("Product Controller GetById", () => {
   it("should have a getProductById", () => {
@@ -119,7 +120,7 @@ describe("Product Controller GetById", () => {
     productModel.findById.mockReturnValue(null)
     await productController.getProductById(req, res, next);
     expect(res.statusCode).toBe(404);
-    expect(res._isEndCalled).toBeTruthy();
+    expect(res._isEndCalled()).toBeTruthy();
   })
   it("should handle errors", async () => {
     const errorsMessage = { message: "error" };
@@ -127,5 +128,19 @@ describe("Product Controller GetById", () => {
     productModel.findById.mockReturnValue(rejectPromise);
     await productController.getProductById(req, res, next);
     expect(next).toHaveBeenCalledWith(errorsMessage);
+  })
+});
+
+describe("Product Controller Update", () => {
+  it("should have an updateProduct function", () => {
+    expect(typeof productController.updateProduct).toBe("function");
+  })
+  it("should call productModel.findByIdAndUpdate", async () => {
+    req.params.productId = productId;
+    req.body = { name: "update", description: "update" };
+    await productController.updateProduct(req, res, next);
+    expect(productModel.findByIdAndUpdate).toHaveBeenCalledWith(
+      productId, { name: "update", description: "update" }, { new: true }
+    )
   })
 })
