@@ -46,8 +46,11 @@ exports.updateProduct = async (req, res, next) => {
       req.body,
       { new: true }
     )
-    product ? res.status(200).json(product) : res.status(404).send();
-
+    if (product) {
+      return res.status(200).json(product)
+    } else {
+      return res.status(404).send();
+    }
   } catch (error) {
     next(error)
   }
@@ -55,11 +58,11 @@ exports.updateProduct = async (req, res, next) => {
 
 exports.deleteProduct = async (req, res, next) => {
   try {
-    let deleteProduct = await productModel.findByIdAndDelete(req.params.productId);
+    const deleteProduct = await productModel.findByIdAndDelete(req.params.productId);
     if (deleteProduct) {
-      res.status(200).json(deleteProduct);
+      return res.status(200).json(deleteProduct);
     } else {
-      res.status(404).send();
+      return res.status(404).send();
     }
   } catch (error) {
     next(error)

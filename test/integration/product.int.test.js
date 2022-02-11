@@ -31,6 +31,7 @@ it("should return 500 on POST /api/products", async () => {
 // read
 it("GET /api/products", async () => {
   const response = await request(app).get('/api/products');
+  // console.log('response: ', response.body[0]);                 // 6201ef110260a022ede7d188
   expect(response.statusCode).toBe(200);
   expect(Array.isArray(response.body)).toBeTruthy();
   expect(response.body[0].name).toBeDefined();
@@ -65,17 +66,25 @@ it("PUT /api/products", async () => {
 // update
 it("should return 404 on PUT /api/products", async () => {
   const res = await request(app)
-    .put('/api/products' + "620517b8eb3972e2e21d5811")
+    .put('/api/products/' + "620517b8eb3972e2e21d5811")
     .send({ name: "update", description: "update" });
   expect(res.statusCode).toBe(404);
 })
 
 // delete
 it("DELETE /api/products", async () => {
+  console.log(firstProduct._id);
   const res = await request(app)
-    .delete('/api/products' + firstProduct._id)
+    // 에러 해결: "/api/products/" + :id
+    .delete("/api/products/" + firstProduct._id)
     .send();
   expect(res.statusCode).toBe(200);
 })
 
-// 통합 테스트는 전체 테스트 한다. 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
+it("DELETE id doesn't exist /api/products/:productId", async () => {
+  // 통합 테스트는 전체 테스트 한다. 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
+  const res = await request(app)
+    .delete("/api/products/" + firstProduct._id)
+    .send();
+  expect(res.statusCode).toBe(404);
+})
