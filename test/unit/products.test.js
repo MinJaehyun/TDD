@@ -17,13 +17,14 @@ let req, res, next;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
+  req.body = newProduct;
   next = jest.fn();
 })
 
 describe("Product Controller Create", () => {
   // create 에서만 사용될 newProduct
   beforeEach(() => {
-    req.body = newProduct;
+    // req.body = newProduct;
   })
   // type 이 함수인지 확인
   it("should have a createProduct function", () => {
