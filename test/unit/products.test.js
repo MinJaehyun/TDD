@@ -31,8 +31,8 @@ describe("Product Controller Create", () => {
     expect(typeof productController.createProduct).toBe("function")
   })
   // 모델의 create 실행 시, 넘겨받은 값을 확인
-  it("should call ProductModel.create", () => {
-    productController.createProduct(req, res, next);
+  it("should call ProductModel.create", async () => {
+    await productController.createProduct(req, res, next);
     // toBeCalledWith: 인자로 무엇이 넘어 왔는지를 검증할 수 있다.
     expect(productModel.create).toBeCalledWith(newProduct);
     // toBeCalled : 잘못된 Matcher 사용 시, 아래 에러 발생

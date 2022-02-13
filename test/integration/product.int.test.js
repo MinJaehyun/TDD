@@ -74,6 +74,7 @@ it("DELETE /api/products", async () => {
   expect(res.statusCode).toBe(200);
 })
 
+// delete
 it("DELETE id doesn't exist /api/products/:productId", async () => {
   // 통합 테스트는 전체 테스트 한다. 삭제된 id 를 가져오면 없는 id 이므로 에러 처리 테스트를 구현할 수 있다. 
   const res = await request(app)
